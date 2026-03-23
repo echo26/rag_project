@@ -1,0 +1,10 @@
+[MESSAGES CONTROL]
+disable=
+    C0114,
+    C0115,
+    C0116,
+    W4901,
+    C0411,
+    E1111,
+    W0613,
+    W0611,
