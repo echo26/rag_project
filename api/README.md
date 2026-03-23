@@ -19,7 +19,7 @@ ANTHROPIC_API_KEY=...
 ## Run
 
 ```bash
-uv run fastapi dev main.py
+uv run fastapi dev app.py
 ```
 
 The server starts at `http://localhost:8000`.
