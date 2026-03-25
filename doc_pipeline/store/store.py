@@ -15,6 +15,7 @@ BATCH_SIZE = 100
 
 
 def upsert_docs(docs: Iterator[dict]) -> None:
+    # MongoClient as context manager: closes connection on exit → no fd leak
     with MongoClient(os.environ["MONGODB_URI"]) as client:
         collection = client[DB_NAME][COLLECTION_NAME]
         batch = []
@@ -23,6 +24,8 @@ def upsert_docs(docs: Iterator[dict]) -> None:
             update_fields = {
                 k: v for k, v in doc.items() if k not in ("_id", "created_at")
             }
+            # UpdateOne with upsert: insert if not exists,
+            # update if exists → safe to re-run
             batch.append(
                 UpdateOne(
                     {"_id": doc["_id"]},
@@ -33,6 +36,8 @@ def upsert_docs(docs: Iterator[dict]) -> None:
                     upsert=True,
                 )
             )
+            # batch: send N ops in one network round-trip
+            # instead of N round-trips
             if len(batch) == BATCH_SIZE:
                 result = collection.bulk_write(batch, ordered=False)
                 total += len(batch)
