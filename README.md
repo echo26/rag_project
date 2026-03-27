@@ -58,6 +58,24 @@ docker-compose up
 docker-compose run ingest
 ```
 
+## Ollama Setup
+
+Embeddings are generated locally via Ollama. Install and pull the model before running the pipeline:
+
+```bash
+# Install: https://ollama.com
+ollama pull bge-m3
+
+# Start the server
+ollama serve
+```
+
+### Embedding models
+
+| Model    | Dimensions | Notes                            |
+| -------- | ---------- | -------------------------------- |
+| `bge-m3` | 1024       | Default. Higher quality, slower. |
+
 ## Code Quality
 
 ### Tools

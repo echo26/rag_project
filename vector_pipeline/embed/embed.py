@@ -4,9 +4,11 @@ from langchain_ollama import OllamaEmbeddings
 
 from models import Chunk, EmbeddedChunk
 
+# 1024 size vector model
 embeddings_model = OllamaEmbeddings(model="bge-m3")
 
-BATCH_SIZE = 32
+# increase to improve embed bottleneck at pipeline
+BATCH_SIZE = 128
 
 
 def embed_chunks(chunks: Iterator[Chunk]) -> Iterator[EmbeddedChunk]:

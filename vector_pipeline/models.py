@@ -1,12 +1,13 @@
 from datetime import datetime
+from typing import Annotated
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, BeforeValidator, Field
 
 
 class Doc(BaseModel):
     id: str = Field(alias="_id")
     source: str
-    doc_id: str
+    doc_id: Annotated[str, BeforeValidator(str)]
     title: str
     text: str
     url_path_suffix: str
