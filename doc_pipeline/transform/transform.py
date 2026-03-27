@@ -33,15 +33,21 @@ def _skip_line(line: str) -> bool:
 
 
 def parse_text(text: str) -> str:
-    lines = []
+    paragraphs = []
+    current = []
     for line in text.split("\n"):
         line = line.strip()
         if not line:
+            if current:
+                paragraphs.append(" ".join(current))
+                current = []
             continue
         if line.startswith(_SKIP_PREFIXES) or _skip_line(line):
             continue
-        lines.append(line)
-    text = " ".join(lines)
+        current.append(line)
+    if current:
+        paragraphs.append(" ".join(current))
+    text = "\n\n".join(paragraphs)
     text = text.translate(str.maketrans("", "", "\"'|"))
     return re.sub(r" {2,}", " ", text).strip()
 
