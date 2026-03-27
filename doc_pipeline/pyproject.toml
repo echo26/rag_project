@@ -5,6 +5,7 @@ requires-python = ">=3.11"
 dependencies = [
     "mwparserfromhell>=0.7.2",
     "mwxml>=0.3.7",
+    "pydantic>=2.12.5",
     "pymongo",
     "python-dotenv",
 ]
@@ -34,3 +35,4 @@ python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "-v --tb=short"
+pythonpath = [".."]

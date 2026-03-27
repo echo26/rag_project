@@ -3,6 +3,9 @@ from datetime import datetime, timezone
 from typing import Iterator
 from urllib.parse import quote
 
+from models import RawArticle
+from shared_models import Doc
+
 INGESTED_AT = datetime.now(timezone.utc)
 
 
@@ -52,21 +55,21 @@ def parse_text(text: str) -> str:
     return re.sub(r" {2,}", " ", text).strip()
 
 
-def transform_articles(articles: Iterator[dict]) -> Iterator[dict]:
+def transform_articles(articles: Iterator[RawArticle]) -> Iterator[Doc]:
     for article in articles:
         yield transform_article(article)
 
 
-def transform_article(article: dict) -> dict:
-    # url : "https://simple.wikipedia.org/wiki/" + url_path_suffix
-    doc = {
-        "_id": f"simplewiki_{article['id']}",
-        "source": "simplewiki",
-        "doc_id": article["id"],
-        "title": article["title"],
-        "text": parse_text(article["text"]),
-        "url_path_suffix": quote(article["title"].replace(" ", "_")),
-        "created_at": INGESTED_AT,
-        "updated_at": INGESTED_AT,
-    }
-    return doc
+def transform_article(article: RawArticle) -> Doc:
+    return Doc.model_validate(
+        {
+            "_id": f"simplewiki_{article.id}",
+            "source": "simplewiki",
+            "doc_id": article.id,
+            "title": article.title,
+            "text": parse_text(article.text),
+            "url_path_suffix": quote(article.title.replace(" ", "_")),
+            "created_at": INGESTED_AT,
+            "updated_at": INGESTED_AT,
+        }
+    )

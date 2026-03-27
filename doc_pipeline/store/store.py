@@ -1,11 +1,13 @@
 import logging
 import os
 from typing import Iterator
+
 from dotenv import load_dotenv
 from pymongo import MongoClient, UpdateOne
 
-logger = logging.getLogger(__name__)
+from shared_models import Doc
 
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -14,30 +16,26 @@ COLLECTION_NAME = "docs"
 BATCH_SIZE = 100
 
 
-def upsert_docs(docs: Iterator[dict]) -> None:
-    # MongoClient as context manager: closes connection on exit → no fd leak
+def upsert_docs(docs: Iterator[Doc]) -> None:
     with MongoClient(os.environ["MONGODB_URI"]) as client:
         collection = client[DB_NAME][COLLECTION_NAME]
         batch = []
         total = 0
         for doc in docs:
+            data = doc.model_dump(by_alias=True)
             update_fields = {
-                k: v for k, v in doc.items() if k not in ("_id", "created_at")
+                k: v for k, v in data.items() if k not in ("_id", "created_at")
             }
-            # UpdateOne with upsert: insert if not exists,
-            # update if exists → safe to re-run
             batch.append(
                 UpdateOne(
-                    {"_id": doc["_id"]},
+                    {"_id": data["_id"]},
                     {
                         "$set": update_fields,
-                        "$setOnInsert": {"created_at": doc["created_at"]},
+                        "$setOnInsert": {"created_at": data["created_at"]},
                     },
                     upsert=True,
                 )
             )
-            # batch: send N ops in one network round-trip
-            # instead of N round-trips
             if len(batch) == BATCH_SIZE:
                 result = collection.bulk_write(batch, ordered=False)
                 total += len(batch)
