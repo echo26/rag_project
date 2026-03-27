@@ -16,3 +16,7 @@ htmlcov/
 
 .env
 .python-version
+
+BRAINSTORM.md
+
+.vscode
