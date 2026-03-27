@@ -6,5 +6,6 @@ from chunk.rule_based_chunk import (
 def chunk_articles(articles):
     for doc in articles:
         chunks = rule_based_length_chunk(doc)
-        yield chunks
+        # emit chunk individually
+        yield from chunks
     pass
