@@ -7,6 +7,21 @@ cd pipeline
 uv sync
 ```
 
+## Ollama Setup
+
+Install Ollama and pull the required models:
+
+```bash
+# Install: https://ollama.com
+ollama pull bge-m3
+```
+
+Ollama must be running before starting the pipeline:
+
+```bash
+ollama serve
+```
+
 ## Run
 
 ```bash
