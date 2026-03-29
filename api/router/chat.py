@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
 import config
-from core.llm import stream_response
+from core.rag import stream_rag_response
 from models import ChatRequest
 
 router = APIRouter()
@@ -19,7 +19,7 @@ async def chat(request: ChatRequest) -> StreamingResponse:
     async def generate():
         try:
             async with asyncio.timeout(config.REQUEST_TIMEOUT):
-                async for chunk in stream_response(request.message):
+                async for chunk in stream_rag_response(request.message):
                     yield chunk
         except TimeoutError:
             yield "\n[error: request timed out]"
