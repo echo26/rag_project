@@ -8,6 +8,7 @@ dependencies = [
     "langchain",
     "langchain-openai",
     "langchain-anthropic",
+    "langgraph>=0.2",
     "qdrant-client",
     "python-dotenv",
     "pydantic",
@@ -39,7 +40,7 @@ exclude = [".venv"]
 select = ["E", "F", "I"]  # pycodestyle, pyflakes, isort
 
 [tool.ruff.lint.isort]
-known-first-party = ["config", "core", "models", "router"]
+known-first-party = ["config", "core", "graph", "models", "router", "vectordb"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
