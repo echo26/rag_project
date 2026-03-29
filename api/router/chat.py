@@ -1,7 +1,10 @@
+import asyncio
+
 import anthropic
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
+import config
 from core.llm import stream_response
 from models import ChatRequest
 
@@ -15,8 +18,11 @@ async def chat(request: ChatRequest) -> StreamingResponse:
 
     async def generate():
         try:
-            async for chunk in stream_response(request.message):
-                yield chunk
+            async with asyncio.timeout(config.REQUEST_TIMEOUT):
+                async for chunk in stream_response(request.message):
+                    yield chunk
+        except TimeoutError:
+            yield "\n[error: request timed out]"
         except anthropic.APIError as e:
             yield f"\n[error: {e}]"
 
