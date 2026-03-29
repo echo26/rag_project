@@ -5,7 +5,7 @@ from typing import Iterator
 from dotenv import load_dotenv
 from pymongo import MongoClient, UpdateOne
 
-from shared_models import Doc
+from models import Doc
 
 logger = logging.getLogger(__name__)
 

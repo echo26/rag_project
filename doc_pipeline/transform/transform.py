@@ -4,7 +4,7 @@ from typing import Iterator
 from urllib.parse import quote
 
 from models import RawArticle
-from shared_models import Doc
+from models import Doc
 
 INGESTED_AT = datetime.now(timezone.utc)
 
