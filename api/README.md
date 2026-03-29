@@ -24,6 +24,15 @@ uv run fastapi dev app.py
 
 The server starts at `http://localhost:8000`.
 
+## Docker
+
+Build and run the API:
+
+```bash
+docker build -t fastapi .
+docker run -p 8000:8000 --env-file .env -e QDRANT_URL=http://host.docker.internal:6333 fastapi
+```
+
 ## Test
 
 ```bash

@@ -21,3 +21,5 @@ BRAINSTORM.md
 
 .vscode
 pyrightconfig.json
+
+.dockerignore
