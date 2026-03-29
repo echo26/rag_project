@@ -20,3 +20,4 @@ htmlcov/
 BRAINSTORM.md
 
 .vscode
+pyrightconfig.json
