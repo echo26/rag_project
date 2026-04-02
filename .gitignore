@@ -23,3 +23,5 @@ BRAINSTORM.md
 pyrightconfig.json
 
 .dockerignore
+
+*.log
