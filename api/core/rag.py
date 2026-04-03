@@ -7,8 +7,11 @@ from graph.rag_graph import rag_graph
 from graph.state import RAGState
 
 
-async def stream_rag_response(query: str) -> AsyncIterator[str]:
-    state = cast(RAGState, await rag_graph.ainvoke({"query": query, "context": []}))
-    prompt = build_prompt(state["query"], state["context"])
+async def stream_rag_response(query: str, use_rag: bool = True) -> AsyncIterator[str]:
+    if use_rag:
+        state = cast(RAGState, await rag_graph.ainvoke({"query": query, "context": []}))
+        prompt = build_prompt(state["query"], state["context"])
+    else:
+        prompt = build_prompt(query, [])
     async for chunk in stream_response(prompt):
         yield chunk

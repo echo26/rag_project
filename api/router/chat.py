@@ -19,7 +19,7 @@ async def chat(request: ChatRequest) -> StreamingResponse:
     async def generate():
         try:
             async with asyncio.timeout(config.REQUEST_TIMEOUT):
-                async for chunk in stream_rag_response(request.message):
+                async for chunk in stream_rag_response(request.message, request.use_rag):
                     yield chunk
         except TimeoutError:
             yield "\n[error: request timed out]"
